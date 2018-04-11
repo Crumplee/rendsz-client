@@ -16,6 +16,13 @@ namespace ClientProcess
             {
                 switch(data)
                 {
+                    case "1":
+                        //termekregisztralas
+                        BehozandoTermekRegisztralas asd = new BehozandoTermekRegisztralas();
+                        asd.adatokBekerese();
+
+                        //data = data + Console.ReadLine();
+                        break;
                     case "2":
                         Console.Write("Text: ");
                         data = data + Console.ReadLine();
@@ -24,11 +31,14 @@ namespace ClientProcess
                         Console.Write("Text: ");
                         data = data + Console.ReadLine();
                         break;
+                    case "4":
+                        Console.Write("Text: ");
+                        data = data + Console.ReadLine();
+                        break;
                     default:
                         break;
                 }
                 CommObject commObject = new CommObject(data);
-
                 Task<CommObject> tsResponse = SocketClient.SendRequest(commObject);
                 Console.WriteLine("Sent request, waiting for response");
                 CommObject dResponse = tsResponse.Result;
@@ -40,9 +50,10 @@ namespace ClientProcess
 
         public void Menu()
         {
-            Console.WriteLine("1. Date and Time");
-            Console.WriteLine("2. Reverse");
-            Console.WriteLine("3. Mocking");
+            Console.WriteLine("1. Behozando termek regisztralas");
+            Console.WriteLine("2. Termekek adatainak kiirasa");
+            Console.WriteLine("3. Munkarend felvitele");
+            Console.WriteLine("4. Munkarend lekerdezese");
         }
     }
 }
