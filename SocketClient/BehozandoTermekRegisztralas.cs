@@ -72,8 +72,7 @@ class BehozandoTermekRegisztralas
     {
         CommObject commObject = new CommObject("behozandoTermekRogzitese");
         commObject.termekAdatok = new CommObject.termekAdatokStruct(megrendeloAzonosito, termekNev, kulsoVonalkod, tipus, beIdopont, kiIdopont, mennyiseg, raklaphelyek);
-
-
+        
         Task<CommObject> tsResponse = SocketClient.SendRequest(commObject);
         Console.WriteLine("Sent request, waiting for response");
         CommObject dResponse = tsResponse.Result;

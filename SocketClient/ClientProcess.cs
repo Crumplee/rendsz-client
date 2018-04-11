@@ -38,11 +38,6 @@ namespace ClientProcess
                     default:
                         break;
                 }
-                CommObject commObject = new CommObject(data);
-                Task<CommObject> tsResponse = SocketClient.SendRequest(commObject);
-                Console.WriteLine("Sent request, waiting for response");
-                CommObject dResponse = tsResponse.Result;
-                Console.WriteLine("Received response: " + dResponse);
                 Menu();
                 data = Console.ReadLine();
             }
