@@ -54,6 +54,7 @@ class BehozandoTermekRegisztralas
         Task<CommObject> tsResponse = SocketClient.SendRequest(commObject);
         Console.WriteLine("Sent request, waiting for response");
         CommObject dResponse = tsResponse.Result;
+
         foreach (string elem in dResponse.lista)
         {
             Console.WriteLine(elem);
@@ -76,5 +77,6 @@ class BehozandoTermekRegisztralas
         Task<CommObject> tsResponse = SocketClient.SendRequest(commObject);
         Console.WriteLine("Sent request, waiting for response");
         CommObject dResponse = tsResponse.Result;
+        Console.WriteLine(dResponse.Message);
     }
 }

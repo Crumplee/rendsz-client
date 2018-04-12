@@ -42,9 +42,24 @@ namespace Communication
             }
         }
 
+        public struct beosztasAdatokStruct
+        {
+            public string dolgozoAzonosito;
+            public DateTime datum;
+            public int muszakSorszam;
+
+            public beosztasAdatokStruct(string _dolgozoAzonosito, DateTime _datum, int _muszakSorszam)
+            {
+                dolgozoAzonosito = _dolgozoAzonosito;
+                datum = _datum;
+                muszakSorszam = _muszakSorszam;
+            }
+        }
 
         public List<termekAdatokStruct> termekAdatokLista = new List<termekAdatokStruct>();
+        public List<beosztasAdatokStruct> beosztasokAdatokLista = new List<beosztasAdatokStruct>();
         public termekAdatokStruct termekAdatok;
+        public beosztasAdatokStruct beosztasAdatok;
 
         public CommObject() { }
         public CommObject(string msg)

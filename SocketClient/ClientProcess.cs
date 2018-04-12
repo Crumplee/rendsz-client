@@ -26,12 +26,12 @@ namespace ClientProcess
                         termekekListazasa();
                         break;
                     case "3":
-                        Console.Write("Text: ");
-                        data = data + Console.ReadLine();
+                        //munkarendfelvitele
+                        munkarendHozzaadas("bela01");
                         break;
                     case "4":
-                        Console.Write("Text: ");
-                        data = data + Console.ReadLine();
+                        //munkarendlekerdezes
+                        munkarendLekerdezes();
                         break;
                     default:
                         break;
@@ -71,6 +71,41 @@ namespace ClientProcess
                     Console.WriteLine(raklap);
                 }
                 Console.WriteLine("________________________________");
+            }
+        }
+
+        public void munkarendHozzaadas(string azonosito)
+        {
+            Console.Write("Datum: ");
+            DateTime datum;
+            DateTime.TryParse(Console.ReadLine(), out datum);
+            Console.Write("Muszak sorszam: ");
+            int muszakSorszam;
+            int.TryParse(Console.ReadLine(), out muszakSorszam);
+
+
+            CommObject commObject = new CommObject("munkarendHozzaadas");
+            commObject.beosztasAdatok = new CommObject.beosztasAdatokStruct(azonosito, datum, muszakSorszam);
+
+            Task<CommObject> tsResponse = SocketClient.SendRequest(commObject);
+            Console.WriteLine("Sent request, waiting for response");
+            CommObject dResponse = tsResponse.Result;
+            Console.WriteLine(dResponse.Message);
+        }
+
+        public void munkarendLekerdezes()
+        {
+            CommObject commObject = new CommObject("munkarendLekerdezes");
+
+            Task<CommObject> tsResponse = SocketClient.SendRequest(commObject);
+            Console.WriteLine("Sent request, waiting for response");
+            CommObject dResponse = tsResponse.Result;
+            foreach(CommObject.beosztasAdatokStruct beosztasAdatok in dResponse.beosztasokAdatokLista)
+            {
+                Console.WriteLine(beosztasAdatok.dolgozoAzonosito);
+                Console.WriteLine(beosztasAdatok.datum);
+                Console.WriteLine(beosztasAdatok.muszakSorszam);
+                Console.WriteLine("_________________________");
             }
         }
     }
