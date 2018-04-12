@@ -19,6 +19,7 @@ namespace Communication
             public DateTime kiIdopont;
             public int mennyiseg;
             public List<string> raklaphelyek;
+            public List<string> raklapAdatok;
 
             public termekAdatokStruct(string _megrendeloAzonosito,
                                 string _termekNev,
@@ -37,9 +38,12 @@ namespace Communication
                 kiIdopont = _kiIdopont;
                 mennyiseg = _mennyiseg;
                 raklaphelyek = _raklaphelyek;
+                raklapAdatok = new List<string>();
             }
         }
 
+
+        public List<termekAdatokStruct> termekAdatokLista = new List<termekAdatokStruct>();
         public termekAdatokStruct termekAdatok;
 
         public CommObject() { }

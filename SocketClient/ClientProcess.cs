@@ -18,14 +18,12 @@ namespace ClientProcess
                 {
                     case "1":
                         //termekregisztralas
-                        BehozandoTermekRegisztralas asd = new BehozandoTermekRegisztralas();
-                        asd.adatokBekerese();
-
-                        //data = data + Console.ReadLine();
+                        BehozandoTermekRegisztralas beTermekReg = new BehozandoTermekRegisztralas();
+                        beTermekReg.adatokBekerese();
                         break;
                     case "2":
-                        Console.Write("Text: ");
-                        data = data + Console.ReadLine();
+                        //termekekkilistazasa
+                        termekekListazasa();
                         break;
                     case "3":
                         Console.Write("Text: ");
@@ -49,6 +47,31 @@ namespace ClientProcess
             Console.WriteLine("2. Termekek adatainak kiirasa");
             Console.WriteLine("3. Munkarend felvitele");
             Console.WriteLine("4. Munkarend lekerdezese");
+        }
+
+        public void termekekListazasa()
+        {
+            CommObject commObject = new CommObject("termekekListazasa");
+
+            Task<CommObject> tsResponse = SocketClient.SendRequest(commObject);
+            Console.WriteLine("Sent request, waiting for response");
+            CommObject dResponse = tsResponse.Result;
+
+            foreach(CommObject.termekAdatokStruct termek in dResponse.termekAdatokLista)
+            {
+                Console.WriteLine(termek.megrendeloAzonosito);
+                Console.WriteLine(termek.termekNev);
+                Console.WriteLine(termek.kulsoVonalkod);
+                Console.WriteLine(termek.tipus);
+                Console.WriteLine(termek.beIdopont);
+                Console.WriteLine(termek.kiIdopont);
+                Console.WriteLine(termek.mennyiseg);
+                foreach(string raklap in termek.raklapAdatok)
+                {
+                    Console.WriteLine(raklap);
+                }
+                Console.WriteLine("________________________________");
+            }
         }
     }
 }
