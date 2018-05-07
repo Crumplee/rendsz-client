@@ -33,6 +33,7 @@ namespace AsynchronousClient
                 writer = new StreamWriter(networkStream);
                 reader = new StreamReader(networkStream);
                 writer.AutoFlush = true;
+                
             }
             catch (Exception ex)
             {

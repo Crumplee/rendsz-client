@@ -10,6 +10,21 @@ namespace ClientProcess
         public Process() { }
         public void ReadAndWrite()
         {
+            Console.WriteLine("Jelentkezz be te fereg");
+            Console.WriteLine("azon: ");
+            string azon = Console.ReadLine();
+            Console.WriteLine("vonalkod: ");
+            string kod = Console.ReadLine();
+
+            CommObject dataaa = new CommObject();
+            dataaa.Message = "bejelentkezes";
+            dataaa.bejelentkezesadatok = new CommObject.bejelentkezesAdatok(azon, kod);
+            Task<CommObject> tsResponse = SocketClient.SendRequest(dataaa);
+            Console.WriteLine("Sent request, waiting for response");
+            CommObject dResponse = tsResponse.Result;
+            Console.WriteLine(dResponse.Message);
+
+
             Menu();
             string data = Console.ReadLine();
             while (data != "bye")

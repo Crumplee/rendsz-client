@@ -6,6 +6,19 @@ namespace Communication
     [Serializable]
     public class CommObject
     {
+        public struct bejelentkezesAdatok
+        {
+            public string azonosito, vonalkod;
+
+            public bejelentkezesAdatok(string _azonosito, string _vonalkod)
+            {
+                azonosito = _azonosito;
+                vonalkod = _vonalkod;
+            }
+        }
+
+        public bejelentkezesAdatok bejelentkezesadatok;
+
         public string Message { get; set; }
         public bool hutott;
         public List<string> lista;
