@@ -10,22 +10,29 @@ namespace ClientProcess
         public Process() { }
         public void ReadAndWrite()
         {
-            Console.WriteLine("Jelentkezz be te fereg");
-            Console.WriteLine("azon: ");
-            string azon = Console.ReadLine();
-            Console.WriteLine("vonalkod: ");
-            string kod = Console.ReadLine();
+            CommObject dResponse = null;
+            do
+            {
+                Console.WriteLine("Jelentkezz be te fereg");
+                Console.Write("Azonosito: ");
+                string azon = Console.ReadLine();
+                Console.Write("Vonalkod: ");
+                string kod = Console.ReadLine();
 
-            CommObject dataaa = new CommObject();
-            dataaa.Message = "bejelentkezes";
-            dataaa.bejelentkezesadatok = new CommObject.bejelentkezesAdatok(azon, kod);
-            Task<CommObject> tsResponse = SocketClient.SendRequest(dataaa);
-            Console.WriteLine("Sent request, waiting for response");
-            CommObject dResponse = tsResponse.Result;
-            Console.WriteLine(dResponse.Message);
+                CommObject dataaa = new CommObject();
+                dataaa.Message = "bejelentkezes";
+                dataaa.bejelentkezesadatok = new CommObject.bejelentkezesAdatok(azon, kod);
+                Task<CommObject> tsResponse = SocketClient.SendRequest(dataaa);
+                Console.WriteLine("Sent request, waiting for response");
+                dResponse = tsResponse.Result;
+                if(dResponse.Message == "hiba")
+                {
+                    Console.WriteLine("Sikertelen bejelentkezes! Probald ujra...te fereg!");
+                }
 
+            } while (dResponse.Message == "hiba");
 
-            Menu();
+            MenuJogosultsaghoz(dResponse.Message);
             string data = Console.ReadLine();
             while (data != "bye")
             {
@@ -51,12 +58,12 @@ namespace ClientProcess
                     default:
                         break;
                 }
-                Menu();
+                MenuJogosultsaghoz(dResponse.Message);
                 data = Console.ReadLine();
             }
         }
 
-        public void Menu()
+        public void MenuJogosultsaghoz(string jogosultsag)
         {
             Console.WriteLine("1. Behozando termek regisztralas");
             Console.WriteLine("2. Termekek adatainak kiirasa");
