@@ -1,6 +1,6 @@
 ﻿using System;
 using AsynchronousClient;
-using ClientProcess;
+using KliensKontroller;
 
 public class Program
 {
