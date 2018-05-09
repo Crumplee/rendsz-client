@@ -72,7 +72,7 @@ class BehozandoTermekRegisztralas
                                 List<string> raklaphelyek)
     {
         CommObject commObject = new CommObject("behozandoTermekRogzitese");
-        commObject.termekAdatok = new CommObject.termekAdatokStruct(megrendeloAzonosito, termekNev, kulsoVonalkod, tipus, beIdopont, kiIdopont, mennyiseg, raklaphelyek);
+        commObject.termekAdatok = new CommObject.termekAdatokStruct(megrendeloAzonosito, termekNev, kulsoVonalkod, tipus, beIdopont.ToString(), kiIdopont.ToString(), mennyiseg, raklaphelyek);
         
         Task<CommObject> tsResponse = SocketClient.SendRequest(commObject);
         FelhasznaloiInterfesz.kiir("Sent request, waiting for response\n");

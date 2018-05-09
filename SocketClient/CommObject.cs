@@ -16,6 +16,26 @@ namespace Communication
         public beosztasAdatokStruct beosztasAdatok;
         public felhasznaloAdatokStruct felhasznaloAdatok;
         public List<felhasznaloAdatokStruct> felhasznalokLista = new List<felhasznaloAdatokStruct>();
+        public terminalBeosztasAdatokStruct terminalBeosztasAdatok;
+
+        public struct terminalBeosztasAdatokStruct
+        {
+            public DateTime idopont;
+            public int idotartamEgyseg;
+            public bool hutott;
+            public string irany;
+            public termekAdatokStruct termek;
+
+            public terminalBeosztasAdatokStruct(DateTime _idopont, int _idotartamEgyseg, bool _hutott, string _irany, termekAdatokStruct _termek)
+            {
+                idopont = _idopont;
+                idotartamEgyseg = _idotartamEgyseg;
+                hutott = _hutott;
+                irany = _irany;
+                termek = _termek;
+            }
+        }
+
 
         public struct bejelentkezesAdatok
         {
@@ -48,8 +68,8 @@ namespace Communication
             public string termekNev;
             public string kulsoVonalkod;
             public string tipus;
-            public DateTime beIdopont;
-            public DateTime kiIdopont;
+            public string beIdopont;
+            public string kiIdopont;
             public int mennyiseg;
             public List<string> raklaphelyek;
             public List<string> raklapAdatok;
@@ -58,8 +78,8 @@ namespace Communication
                                 string _termekNev,
                                 string _kulsoVonalkod,
                                 string _tipus,
-                                DateTime _beIdopont,
-                                DateTime _kiIdopont,
+                                string _beIdopont,
+                                string _kiIdopont,
                                 int _mennyiseg,
                                 List<string> _raklaphelyek)
             {
