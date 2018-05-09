@@ -6,6 +6,17 @@ namespace Communication
     [Serializable]
     public class CommObject
     {
+        public string Message { get; set; }
+        public bool hutott;
+        public List<string> lista;
+        public bejelentkezesAdatok bejelentkezesadatok;
+        public List<termekAdatokStruct> termekAdatokLista = new List<termekAdatokStruct>();
+        public List<beosztasAdatokStruct> beosztasokAdatokLista = new List<beosztasAdatokStruct>();
+        public termekAdatokStruct termekAdatok;
+        public beosztasAdatokStruct beosztasAdatok;
+        public felhasznaloAdatokStruct felhasznaloAdatok;
+        public List<felhasznaloAdatokStruct> felhasznalokLista = new List<felhasznaloAdatokStruct>();
+
         public struct bejelentkezesAdatok
         {
             public string azonosito, vonalkod;
@@ -17,11 +28,20 @@ namespace Communication
             }
         }
 
-        public bejelentkezesAdatok bejelentkezesadatok;
+        public struct felhasznaloAdatokStruct
+        {
+            public string azonosito, vonalkod, nev, jogosultsag;
 
-        public string Message { get; set; }
-        public bool hutott;
-        public List<string> lista;
+            public felhasznaloAdatokStruct(string _azonosito, string _vonalkod, string _nev, string _jogosultsag)
+            {
+                azonosito = _azonosito;
+                vonalkod = _vonalkod;
+                nev = _nev;
+                jogosultsag = _jogosultsag;
+            }
+        }
+
+
         public struct termekAdatokStruct
         {
             public string megrendeloAzonosito;
@@ -69,10 +89,6 @@ namespace Communication
             }
         }
 
-        public List<termekAdatokStruct> termekAdatokLista = new List<termekAdatokStruct>();
-        public List<beosztasAdatokStruct> beosztasokAdatokLista = new List<beosztasAdatokStruct>();
-        public termekAdatokStruct termekAdatok;
-        public beosztasAdatokStruct beosztasAdatok;
 
         public CommObject() { }
         public CommObject(string msg)
@@ -80,10 +96,6 @@ namespace Communication
             this.Message = msg;
         }
 
-        public void setHutott(bool value)
-        {
-            hutott = value;
-        }
 
         public override string ToString()
         {
