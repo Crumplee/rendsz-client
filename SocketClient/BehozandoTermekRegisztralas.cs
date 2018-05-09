@@ -49,7 +49,7 @@ class BehozandoTermekRegisztralas
     public void szabadRaklaphelyekListazasa(bool hutott)
     {
         CommObject commObject = new CommObject("szabadRaklaphelyekListazasa");
-        commObject.setHutott(hutott);
+        commObject.hutott = hutott;
 
         Task<CommObject> tsResponse = SocketClient.SendRequest(commObject);
         Console.WriteLine("Sent request, waiting for response");
