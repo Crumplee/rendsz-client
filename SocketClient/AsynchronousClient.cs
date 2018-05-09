@@ -16,6 +16,7 @@ namespace AsynchronousClient
         private static StreamWriter writer;
         private static StreamReader reader;
         private static TcpClient client;
+        public static bool successfulConnection = false;
 
         public static void StartClient()
         {
@@ -28,7 +29,8 @@ namespace AsynchronousClient
                     throw new Exception("No IPv4 address");
                 client = new TcpClient();
                 client.Connect(ipAddress, port); // Connect
-                Console.WriteLine("Connect to server " + ipAddress + " on port " + port);
+                successfulConnection = true;
+                Console.WriteLine("Connected to server " + ipAddress + " on port " + port);
                 NetworkStream networkStream = client.GetStream();
                 writer = new StreamWriter(networkStream);
                 reader = new StreamReader(networkStream);
@@ -38,7 +40,7 @@ namespace AsynchronousClient
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                Console.WriteLine(ex.ToString());
+                //Console.WriteLine(ex.ToString());
             }
         }
 
