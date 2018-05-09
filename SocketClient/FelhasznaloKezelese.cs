@@ -112,6 +112,109 @@ class FelhasznaloKezelese
             }
         } while (!helyesAdat);
     }
+
+    public void modifyFelhasznalo()
+    {
+        CommObject commObject = new CommObject("felhasznalokListazasa");
+        Task<CommObject> tsResponse = SocketClient.SendRequest(commObject);
+        FelhasznaloiInterfesz.kiir("Sent request, waiting for response\n");
+        CommObject dResponse = tsResponse.Result;
+
+        FelhasznaloiInterfesz.kiir("Azonosito\tNev\tJogosultsag\n\n");
+        FelhasznaloiInterfesz.kiir("0. Kilepes\n");
+
+        int i = 1;
+        foreach (CommObject.felhasznaloAdatokStruct felhasznaloAdat in dResponse.felhasznalokLista)
+        {
+            FelhasznaloiInterfesz.kiir(i++ + ". " + felhasznaloAdat.azonosito + "\t" + felhasznaloAdat.nev + "\t" + felhasznaloAdat.jogosultsag + "\n");
+        }
+
+        string valasztas;
+        bool helyesAdat;
+        do
+        {
+            helyesAdat = true;
+            FelhasznaloiInterfesz.kiir("Valasztas sorszama: ");
+            valasztas = FelhasznaloiInterfesz.beker();
+
+            int sorszam;
+            if (Int32.TryParse(valasztas, out sorszam) && sorszam >= 0 && sorszam <= dResponse.felhasznalokLista.Count)
+            {
+                //kilepes
+                if (sorszam == 0) return;
+
+                CommObject.felhasznaloAdatokStruct ujAdatok = dResponse.felhasznalokLista[sorszam - 1];
+                FelhasznaloiInterfesz.kiir("Uj nev (Hagyja uresen, ha nem szeretne valtoztatni): ");
+                string ujNev = FelhasznaloiInterfesz.beker();
+                if (ujNev == "")
+                    ujNev = ujAdatok.nev;
+                else
+                    ujAdatok.nev = ujNev;
+
+                //Josogultsag bekerese
+                string ujJogosultsag;
+                do
+                {
+                    helyesAdat = true;
+                    FelhasznaloiInterfesz.kiir("Jogosultsagok:\n");
+                    FelhasznaloiInterfesz.kiir("1. adminisztrator\n");
+                    FelhasznaloiInterfesz.kiir("2. diszpecser\n");
+                    FelhasznaloiInterfesz.kiir("3. muszakvezeto\n");
+                    FelhasznaloiInterfesz.kiir("4. raktaros\n");
+                    FelhasznaloiInterfesz.kiir("Uj jogosultsag sorszama (Hagyja uresen, ha nem szeretne valtoztatni): ");
+
+                    ujJogosultsag = FelhasznaloiInterfesz.beker();
+                    switch (ujJogosultsag)
+                    {
+                        case "":
+                            break;
+                        case "1":
+                            ujJogosultsag = "adminisztrator";
+                            break;
+                        case "2":
+                            ujJogosultsag = "diszpecser";
+                            break;
+                        case "3":
+                            ujJogosultsag = "muszakvezeto";
+                            break;
+                        case "4":
+                            ujJogosultsag = "raktaros";
+                            break;
+                        default:
+                            FelhasznaloiInterfesz.kiir("Nem ertelmezheto a sorszam. Probald ujra!\n");
+                            helyesAdat = false;
+                            break;
+                    }
+                } while (!helyesAdat);
+
+                if (ujJogosultsag == "")
+                    ujJogosultsag = ujAdatok.jogosultsag;
+                else
+                    ujAdatok.jogosultsag = ujJogosultsag;
+
+                //megerosites
+                FelhasznaloiInterfesz.kiir("Megerosit (i/h): ");
+                string valasz = FelhasznaloiInterfesz.beker();
+                if (valasz == "i")
+                {
+                    //Veglegesites kuldese
+                    CommObject modositoCommObject = new CommObject("felhasznaloModositasa");
+                    modositoCommObject.felhasznaloAdatok = ujAdatok;
+
+                    Task<CommObject> tsResponse2 = SocketClient.SendRequest(modositoCommObject);
+                    FelhasznaloiInterfesz.kiir("Sent request, waiting for response\n");
+                    CommObject dResponse2 = tsResponse2.Result;
+                    if (dResponse2.Message == "felhasznaloModositva")
+                        FelhasznaloiInterfesz.kiir("Felhasznalo sikeresen modositva!\n");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Nem megfelelo sorszam. Probald ujra!");
+                helyesAdat = false;
+            }
+        } while (!helyesAdat);
+    }
 }
 
 

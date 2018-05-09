@@ -79,6 +79,7 @@ namespace KliensKontroller
                         addFelhasznalo();
                         break;
                     case "2":
+                        modifyFelhasznalo();
                         break;
                     case "3":
                         deleteFelhasznalo();
@@ -263,6 +264,11 @@ namespace KliensKontroller
         public void deleteFelhasznalo()
         {
             new FelhasznaloKezelese().deleteFelhasznalo();
+        }
+
+        public void modifyFelhasznalo()
+        {
+            new FelhasznaloKezelese().modifyFelhasznalo();
         }
     }
 }
