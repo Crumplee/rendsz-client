@@ -17,22 +17,43 @@ namespace Communication
         public felhasznaloAdatokStruct felhasznaloAdatok;
         public List<felhasznaloAdatokStruct> felhasznalokLista = new List<felhasznaloAdatokStruct>();
         public terminalBeosztasAdatokStruct terminalBeosztasAdatok;
+        public List<terminalBeosztasAdatokStruct> terminalBeosztasAdatokLista = new List<terminalBeosztasAdatokStruct>();
+        public terminalBeosztasLekerdezesStruct terminalBeosztasLekerdezes;
+
+
+        public struct terminalBeosztasLekerdezesStruct
+        {
+            public string tipus;
+            public string idopont;
+            public string terminal;
+            public bool hutott;
+
+            public terminalBeosztasLekerdezesStruct(string _tipus, string _idopont, string _terminal, bool _hutott)
+            {
+                tipus = _tipus;
+                idopont = _idopont;
+                terminal = _terminal;
+                hutott = _hutott;
+            }
+        }
 
         public struct terminalBeosztasAdatokStruct
         {
-            public DateTime idopont;
+            public string idopont;
             public int idotartamEgyseg;
             public bool hutott;
             public string irany;
-            public termekAdatokStruct termek;
+            public string termekAzonosito;
+            public string terminalAzonosito;
 
-            public terminalBeosztasAdatokStruct(DateTime _idopont, int _idotartamEgyseg, bool _hutott, string _irany, termekAdatokStruct _termek)
+            public terminalBeosztasAdatokStruct(string _idopont, int _idotartamEgyseg, bool _hutott, string _irany, string _termekAzonosito, string _terminalAzonosito)
             {
                 idopont = _idopont;
                 idotartamEgyseg = _idotartamEgyseg;
                 hutott = _hutott;
                 irany = _irany;
-                termek = _termek;
+                termekAzonosito = _termekAzonosito;
+                terminalAzonosito = _terminalAzonosito;
             }
         }
 

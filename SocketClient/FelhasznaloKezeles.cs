@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using AsynchronousClient;
 using Communication;
 
-class FelhasznaloKezelese
+class FelhasznaloKezeles
 {
     public void addFelhasznalo()
     {

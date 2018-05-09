@@ -19,7 +19,7 @@ namespace KliensKontroller
                 string azon = null;
                 do
                 {
-                    FelhasznaloiInterfesz.kiir("\nJelentkezz be te fereg\n");
+                    FelhasznaloiInterfesz.kiir("\nJelentkezz be!\n");
                     FelhasznaloiInterfesz.kiir("Azonosito (kilepeshez 'bye'): ");
                     azon = FelhasznaloiInterfesz.beker();
                     // Kilepes
@@ -37,7 +37,7 @@ namespace KliensKontroller
                     dResponse = tsResponse.Result;
                     if (dResponse.Message == "hiba")
                     {
-                        FelhasznaloiInterfesz.kiir("Sikertelen bejelentkezes! Probald ujra...te fereg!\n");
+                        FelhasznaloiInterfesz.kiir("Sikertelen bejelentkezes. Probald ujra!\n");
                     }
 
                 } while (dResponse.Message == "hiba");
@@ -124,6 +124,7 @@ namespace KliensKontroller
                     case "3":
                         break;
                     case "4":
+                        terminalBeosztasLetrehozasa();
                         break;
                     case "5":
                         break;
@@ -238,12 +239,12 @@ namespace KliensKontroller
 
         public void behozandoTermekRegisztralasa()
         {
-            new BehozandoTermekRegisztralas().behozandoTermekRegisztralasa();
+            new TermekKezeles().behozandoTermekRegisztralasa();
         }
 
         public void termekekListazasa()
         {
-            new TermekekListazasa().termekekListazasa();
+            new TermekKezeles().termekekListazasa();
         }
 
         public void munkarendHozzaadas(string azonosito)
@@ -258,17 +259,22 @@ namespace KliensKontroller
 
         public void addFelhasznalo()
         {
-            new FelhasznaloKezelese().addFelhasznalo();
+            new FelhasznaloKezeles().addFelhasznalo();
         }
 
         public void deleteFelhasznalo()
         {
-            new FelhasznaloKezelese().deleteFelhasznalo();
+            new FelhasznaloKezeles().deleteFelhasznalo();
         }
 
         public void modifyFelhasznalo()
         {
-            new FelhasznaloKezelese().modifyFelhasznalo();
+            new FelhasznaloKezeles().modifyFelhasznalo();
+        }
+
+        public void terminalBeosztasLetrehozasa()
+        {
+            new TerminalBeosztasKezeles().terminalBeosztasLetrehozasa();
         }
     }
 }
