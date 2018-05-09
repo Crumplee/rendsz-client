@@ -76,6 +76,7 @@ namespace KliensKontroller
                 switch (data)
                 {
                     case "1":
+                        addFelhasznalo();
                         break;
                     case "2":
                         break;
@@ -255,7 +256,7 @@ namespace KliensKontroller
 
         public void addFelhasznalo()
         {
-            new FelhasznaloKezelese();
+            new FelhasznaloKezelese().addFelhasznalo();
         }
     }
 }
