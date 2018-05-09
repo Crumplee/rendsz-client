@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using AsynchronousClient;
 using Communication;
-using UI;
 
 namespace KliensKontroller
 {
@@ -114,8 +113,7 @@ namespace KliensKontroller
                 switch (data)
                 {
                     case "1":
-                        BehozandoTermekRegisztralas beTermekReg = new BehozandoTermekRegisztralas();
-                        beTermekReg.adatokBekerese();
+                        behozandoTermekRegisztralasa();
                         break;
                     case "2":
                         termekekListazasa();
@@ -235,72 +233,29 @@ namespace KliensKontroller
             FelhasznaloiInterfesz.kiir("Sikeres kijelentkezes!\n");
         }
 
+        public void behozandoTermekRegisztralasa()
+        {
+            new BehozandoTermekRegisztralas().behozandoTermekRegisztralasa();
+        }
+
         public void termekekListazasa()
         {
-            CommObject commObject = new CommObject("termekekListazasa");
-
-            Task<CommObject> tsResponse = SocketClient.SendRequest(commObject);
-            FelhasznaloiInterfesz.kiir("Sent request, waiting for response\n");
-            CommObject dResponse = tsResponse.Result;
-
-            int i = 1;
-            foreach(CommObject.termekAdatokStruct termek in dResponse.termekAdatokLista)
-            {
-                FelhasznaloiInterfesz.kiir("\n" + i++ + ". termek adatai: \n");
-                FelhasznaloiInterfesz.kiir("Megrendelo azonositoja: " + termek.megrendeloAzonosito + "\n");
-                FelhasznaloiInterfesz.kiir("Nev: " + termek.termekNev + "\n");
-                FelhasznaloiInterfesz.kiir("Kulso vonalkod: " + termek.kulsoVonalkod + "\n");
-                FelhasznaloiInterfesz.kiir("Tipus: " + (termek.tipus == "H" ? "hutott" : "nem hutott") + "\n");
-                FelhasznaloiInterfesz.kiir("Behozatal idopontja: " + termek.beIdopont.ToString() + "\n");
-                FelhasznaloiInterfesz.kiir("Kivitel idopontja: " + termek.kiIdopont.ToString() + "\n");
-                FelhasznaloiInterfesz.kiir("Mennyiseg: " + termek.mennyiseg.ToString() + "\n");
-
-                int j = 1;
-                foreach(string raklap in termek.raklapAdatok)
-                {
-                    FelhasznaloiInterfesz.kiir(j++ + ". raklap azonositoja: " + raklap + "\n");
-                }
-                FelhasznaloiInterfesz.kiir("________________________________\n");
-            }
+            new TermekekListazasa().termekekListazasa();
         }
 
         public void munkarendHozzaadas(string azonosito)
         {
-            FelhasznaloiInterfesz.kiir("Datum: ");
-            DateTime datum;
-            DateTime.TryParse(FelhasznaloiInterfesz.beker(), out datum);
-            FelhasznaloiInterfesz.kiir("Muszak sorszama: ");
-            int muszakSorszam;
-            int.TryParse(FelhasznaloiInterfesz.beker(), out muszakSorszam);
-
-
-            CommObject commObject = new CommObject("munkarendHozzaadas");
-            commObject.beosztasAdatok = new CommObject.beosztasAdatokStruct(azonosito, datum, muszakSorszam);
-
-            Task<CommObject> tsResponse = SocketClient.SendRequest(commObject);
-            FelhasznaloiInterfesz.kiir("Sent request, waiting for response\n");
-            CommObject dResponse = tsResponse.Result;
-            if (dResponse.Message == "munkarendHozzaadva")
-                FelhasznaloiInterfesz.kiir("Munkarend sikeresen hozzaadva!\n");
+            new MunkarendKezeles().munkarendHozzaadas(azonosito);
         }
 
         public void munkarendLekerdezes()
         {
-            CommObject commObject = new CommObject("munkarendLekerdezes");
+            new MunkarendKezeles().munkarendLekerdezes();
+        }
 
-            Task<CommObject> tsResponse = SocketClient.SendRequest(commObject);
-            FelhasznaloiInterfesz.kiir("Sent request, waiting for response\n");
-            CommObject dResponse = tsResponse.Result;
-
-            int i = 1;
-            foreach(CommObject.beosztasAdatokStruct beosztasAdatok in dResponse.beosztasokAdatokLista)
-            {
-                FelhasznaloiInterfesz.kiir("\n" + i++ + ". beosztas: \n");
-                FelhasznaloiInterfesz.kiir("Dolgozo azonositoja: " + beosztasAdatok.dolgozoAzonosito + "\n");
-                FelhasznaloiInterfesz.kiir("Datum: " + beosztasAdatok.datum.ToString() + "\n");
-                FelhasznaloiInterfesz.kiir("Muszak sorszama: " + beosztasAdatok.muszakSorszam.ToString() + "\n");
-                FelhasznaloiInterfesz.kiir("_________________________\n");
-            }
+        public void addFelhasznalo()
+        {
+            new FelhasznaloKezelese();
         }
     }
 }
