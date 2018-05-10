@@ -127,6 +127,7 @@ namespace KliensKontroller
                         terminalBeosztasLetrehozasa();
                         break;
                     case "5":
+                        terminalBeosztasLekerdezese();
                         break;
                     case "6":
                         munkarendLekerdezes();
@@ -275,6 +276,11 @@ namespace KliensKontroller
         public void terminalBeosztasLetrehozasa()
         {
             new TerminalBeosztasKezeles().terminalBeosztasLetrehozasa();
+        }
+
+        public void terminalBeosztasLekerdezese()
+        {
+            new TerminalBeosztasKezeles().terminalBeosztasLekerdezese();
         }
     }
 }
