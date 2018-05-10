@@ -252,7 +252,7 @@ namespace KliensKontroller
 
         public void munkarendHozzaadas(string azonosito)
         {
-            new MunkarendKezeles().munkarendHozzaadas(azonosito);
+            new MunkarendKezeles().munkarendHozzaadas();
         }
 
         public void munkarendLekerdezes()

@@ -5,8 +5,10 @@ using Communication;
 
 class MunkarendKezeles
 {
-    public void munkarendHozzaadas(string azonosito)
+    public void munkarendHozzaadas()
     {
+        FelhasznaloiInterfesz.kiir("Kerem az azonositot: ");
+        string azonosito = FelhasznaloiInterfesz.beker();
         FelhasznaloiInterfesz.kiir("Datum: ");
         DateTime datum;
         DateTime.TryParse(FelhasznaloiInterfesz.beker(), out datum);
