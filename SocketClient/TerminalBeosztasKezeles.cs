@@ -62,7 +62,7 @@ class TerminalBeosztasKezeles
                 //Adatok bekérése
                 CommObject.termekAdatokStruct termek = dResponse.termekAdatokLista[sorszam - 1];
 
-                bool hutott = (termek.tipus == "HH");
+                bool hutott = (termek.tipus == "HH" || termek.tipus == "H");
 
                 FelhasznaloiInterfesz.kiir("Irany? (behozatal/kivitel): ");
                 string irany = FelhasznaloiInterfesz.beker();
@@ -70,7 +70,7 @@ class TerminalBeosztasKezeles
                 string date = null;
 
                 //Irany es termek datumok szerint datum
-                if (irany == "ki" && DateTime.Parse(termek.kiIdopont).ToString() != new DateTime(0).ToString())
+                if (irany == "ki" && DateTime.Parse(termek.kiIdopont).ToString() != new DateTime().ToString())
                 {
                     date = termek.kiIdopont;
                 }
@@ -91,7 +91,7 @@ class TerminalBeosztasKezeles
                 }
 
                 //Veglegesites kuldese
-                CommObject lekerdezoCommObject = new CommObject("terminalBeosztasLekerdezes");
+                CommObject lekerdezoCommObject = new CommObject("terminalBeosztasokLekerdezes");
                 lekerdezoCommObject.terminalBeosztasLekerdezes = new CommObject.terminalBeosztasLekerdezesStruct("datumEsHutottseg", date, "", hutott);
 
                 Task<CommObject> tsResponse2 = SocketClient.SendRequest(lekerdezoCommObject);
@@ -171,7 +171,7 @@ class TerminalBeosztasKezeles
         FelhasznaloiInterfesz.kiir("Kerem a datumot: ");
         if (DateTime.TryParse(FelhasznaloiInterfesz.beker(), out datum)) {
             //kuldes
-            CommObject commObject = new CommObject("terminalBeosztasLekerdezes");
+            CommObject commObject = new CommObject("terminalBeosztasokLekerdezes");
             commObject.terminalBeosztasLekerdezes = new CommObject.terminalBeosztasLekerdezesStruct("datum", datum.ToString(), "", true);
 
             Task<CommObject> tsResponse = SocketClient.SendRequest(commObject);
@@ -199,7 +199,7 @@ class TerminalBeosztasKezeles
         string azonosito = FelhasznaloiInterfesz.beker();
         
         //kuldes
-        CommObject commObject = new CommObject("terminalBeosztasLekerdezes");
+        CommObject commObject = new CommObject("terminalBeosztasokLekerdezes");
         commObject.terminalBeosztasLekerdezes = new CommObject.terminalBeosztasLekerdezesStruct("terminal", null, azonosito, true);
 
         Task<CommObject> tsResponse = SocketClient.SendRequest(commObject);
@@ -227,7 +227,7 @@ class TerminalBeosztasKezeles
             bool hutott = FelhasznaloiInterfesz.beker() == "i" ? true : false;
 
             //kuldes
-            CommObject commObject = new CommObject("terminalBeosztasLekerdezes");
+            CommObject commObject = new CommObject("terminalBeosztasokLekerdezes");
             commObject.terminalBeosztasLekerdezes = new CommObject.terminalBeosztasLekerdezesStruct("datumEsHutottseg", datum.ToString(), "", hutott);
 
             Task<CommObject> tsResponse = SocketClient.SendRequest(commObject);

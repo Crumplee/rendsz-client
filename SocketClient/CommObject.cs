@@ -8,6 +8,7 @@ namespace Communication
     {
         public string Message { get; set; }
         public bool hutott;
+        public string termekAzonosito;
         public List<string> lista;
         public bejelentkezesAdatok bejelentkezesadatok;
         public List<termekAdatokStruct> termekAdatokLista = new List<termekAdatokStruct>();
@@ -19,6 +20,38 @@ namespace Communication
         public terminalBeosztasAdatokStruct terminalBeosztasAdatok;
         public List<terminalBeosztasAdatokStruct> terminalBeosztasAdatokLista = new List<terminalBeosztasAdatokStruct>();
         public terminalBeosztasLekerdezesStruct terminalBeosztasLekerdezes;
+        public termekMozgatasLekerdezesStruct termekMozgatasLekerdezes;
+        public List<mozgoRaklapAdatokStruct> mozgoRaklapAdatok = new List<mozgoRaklapAdatokStruct>();
+
+
+        public struct mozgoRaklapAdatokStruct
+        {
+            public string raklap;
+            public bool bejott;
+            public string epseg;
+
+            public mozgoRaklapAdatokStruct(string _raklap, bool _bejott, string _epseg)
+            {
+                raklap = _raklap;
+                bejott = _bejott;
+                epseg = _epseg;
+            }
+        }
+
+
+        public struct termekMozgatasLekerdezesStruct
+        {
+            public string termekAzonosito;
+            public string idopont;
+            public string terminalAzonosito;
+
+            public termekMozgatasLekerdezesStruct(string _termekAzonosito, string _idopont, string _terminalAzonosito)
+            {
+                termekAzonosito = _termekAzonosito;
+                idopont = _idopont;
+                terminalAzonosito = _terminalAzonosito;
+            }
+        }
 
 
         public struct terminalBeosztasLekerdezesStruct

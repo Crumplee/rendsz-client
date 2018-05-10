@@ -176,8 +176,10 @@ namespace KliensKontroller
                         munkarendLekerdezes();
                         break;
                     case "5":
+                        terminalBeosztasLekerdezese();
                         break;
                     case "6":
+                        termekBehozatal();
                         break;
                     case "7":
                         break;
@@ -281,6 +283,11 @@ namespace KliensKontroller
         public void terminalBeosztasLekerdezese()
         {
             new TerminalBeosztasKezeles().terminalBeosztasLekerdezese();
+        }
+
+        public void termekBehozatal()
+        {
+            new TermekKezeles().termekBehozatal();
         }
     }
 }
