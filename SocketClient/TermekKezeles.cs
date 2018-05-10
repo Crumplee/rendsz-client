@@ -158,4 +158,56 @@ class TermekKezeles
             }
         } while (!helyesFormatum);
     }
+
+    public void termekKivitel()
+    {
+        FelhasznaloiInterfesz.kiir("Kerem a termek azonositojat: ");
+        string termekAzonosito = FelhasznaloiInterfesz.beker();
+
+        DateTime datum;
+        bool helyesFormatum;
+        do
+        {
+            helyesFormatum = true;
+            FelhasznaloiInterfesz.kiir("Kerem a datumot: ");
+            if (DateTime.TryParse(FelhasznaloiInterfesz.beker(), out datum))
+            {
+                FelhasznaloiInterfesz.kiir("Kerem a terminal azonositot: ");
+                string terminalAzonosito = FelhasznaloiInterfesz.beker();
+
+                //kuldes
+                CommObject commObject = new CommObject("termekMozgatasLekerdezes");
+                commObject.termekMozgatasLekerdezes = new CommObject.termekMozgatasLekerdezesStruct(termekAzonosito, datum.ToString(), terminalAzonosito);
+
+                Task<CommObject> tsResponse = SocketClient.SendRequest(commObject);
+                FelhasznaloiInterfesz.kiir("Sent request, waiting for response\n");
+                CommObject dResponse = tsResponse.Result;
+
+                //uj lista feltoltese
+                List<CommObject.mozgoRaklapAdatokStruct> tmpList = new List<CommObject.mozgoRaklapAdatokStruct>();
+                foreach (CommObject.mozgoRaklapAdatokStruct raklap in dResponse.mozgoRaklapAdatok)
+                {
+                    FelhasznaloiInterfesz.kiir(raklap.raklap + " allapota: ");
+                    string epseg = FelhasznaloiInterfesz.beker();
+                    tmpList.Add(new CommObject.mozgoRaklapAdatokStruct(raklap.raklap, false, epseg));
+                }
+
+                //kuldes
+                CommObject commObject2 = new CommObject("termekKivitel");
+                commObject2.mozgoRaklapAdatok = tmpList;
+                commObject2.termekAzonosito = dResponse.termekAzonosito;
+
+                Task<CommObject> tsResponse2 = SocketClient.SendRequest(commObject2);
+                FelhasznaloiInterfesz.kiir("Sent request, waiting for response\n");
+                CommObject dResponse2 = tsResponse.Result;
+                FelhasznaloiInterfesz.kiir(dResponse2.Message);
+
+            }
+            else
+            {
+                FelhasznaloiInterfesz.kiir("Hibas datum formatum! Probald ujra!\n");
+                helyesFormatum = false;
+            }
+        } while (!helyesFormatum);
+    }
 }

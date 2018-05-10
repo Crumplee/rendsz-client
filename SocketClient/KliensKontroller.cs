@@ -289,5 +289,10 @@ namespace KliensKontroller
         {
             new TermekKezeles().termekBehozatal();
         }
+
+        public void termekKivitel()
+        {
+            new TermekKezeles().termekKivitel();
+        }
     }
 }
