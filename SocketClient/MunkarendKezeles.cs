@@ -45,4 +45,23 @@ class MunkarendKezeles
             FelhasznaloiInterfesz.kiir("_________________________\n");
         }
     }
+
+    public void munkarendekLekerdezes()
+    {
+        CommObject commObject = new CommObject("munkarendekLekerdezes");
+
+        Task<CommObject> tsResponse = SocketClient.SendRequest(commObject);
+        FelhasznaloiInterfesz.kiir("Sent request, waiting for response\n");
+        CommObject dResponse = tsResponse.Result;
+
+        int i = 1;
+        foreach (CommObject.beosztasAdatokStruct beosztasAdatok in dResponse.beosztasokAdatokLista)
+        {
+            FelhasznaloiInterfesz.kiir("\n" + i++ + ". beosztas: \n");
+            FelhasznaloiInterfesz.kiir("Dolgozo azonositoja: " + beosztasAdatok.dolgozoAzonosito + "\n");
+            FelhasznaloiInterfesz.kiir("Datum: " + beosztasAdatok.datum.ToString() + "\n");
+            FelhasznaloiInterfesz.kiir("Muszak sorszama: " + beosztasAdatok.muszakSorszam.ToString() + "\n");
+            FelhasznaloiInterfesz.kiir("_________________________\n");
+        }
+    }
 }

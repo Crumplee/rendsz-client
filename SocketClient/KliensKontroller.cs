@@ -154,11 +154,12 @@ namespace KliensKontroller
                 FelhasznaloiInterfesz.kiir("2. Termekek szurt listazasa\n");
                 FelhasznaloiInterfesz.kiir("3. Munkarend hozzaadasa\n");
                 FelhasznaloiInterfesz.kiir("4. Munkarend lekerdezese\n");
-                FelhasznaloiInterfesz.kiir("5. Terminal beosztas lekerdezese\n");
-                FelhasznaloiInterfesz.kiir("6. Termek behozatal\n");
-                FelhasznaloiInterfesz.kiir("7. Termek kivitel\n");
-                FelhasznaloiInterfesz.kiir("8. Kijelentkezes\n");
-                FelhasznaloiInterfesz.kiir("9. Kilepes\n");
+                FelhasznaloiInterfesz.kiir("5. Munkarendek lekerdezese\n");
+                FelhasznaloiInterfesz.kiir("6. Terminal beosztas lekerdezese\n");
+                FelhasznaloiInterfesz.kiir("7. Termek behozatal\n");
+                FelhasznaloiInterfesz.kiir("8. Termek kivitel\n");
+                FelhasznaloiInterfesz.kiir("9. Kijelentkezes\n");
+                FelhasznaloiInterfesz.kiir("10. Kilepes\n");
 
                 FelhasznaloiInterfesz.kiir("Valasztas sorszama: ");
                 data = FelhasznaloiInterfesz.beker();
@@ -176,17 +177,20 @@ namespace KliensKontroller
                         munkarendLekerdezes();
                         break;
                     case "5":
-                        terminalBeosztasLekerdezese();
+                        munkarendekLekerdezes();
                         break;
                     case "6":
-                        termekBehozatal();
+                        terminalBeosztasLekerdezese();
                         break;
                     case "7":
+                        termekBehozatal();
                         break;
                     case "8":
-                        kijelentkezes();
                         break;
                     case "9":
+                        kijelentkezes();
+                        break;
+                    case "10":
                         kilepes();
                         break;
                     default:
@@ -258,6 +262,11 @@ namespace KliensKontroller
         public void munkarendLekerdezes()
         {
             new MunkarendKezeles().munkarendLekerdezes();
+        }
+
+        public void munkarendekLekerdezes()
+        {
+            new MunkarendKezeles().munkarendekLekerdezes();
         }
 
         public void addFelhasznalo()
