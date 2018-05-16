@@ -548,4 +548,92 @@ class TermekKezeles
             }
         } while (!helyesSorszam);
     }
+
+    public void termekekSzurtListazasa()
+    {
+        CommObject.termekAdatokStruct szurok = new CommObject.termekAdatokStruct();
+
+        FelhasznaloiInterfesz.kiir("Nev szuro (Hagyja uresen, ha nem szeretne megadni): ");
+        string nev = FelhasznaloiInterfesz.beker();
+        if (nev == "")
+            szurok.termekNev = null;
+        else
+            szurok.termekNev = nev;
+
+        FelhasznaloiInterfesz.kiir("Kulso vonalkod szuro (Hagyja uresen, ha nem szeretne megadni): ");
+        string kulsoVonalkod = FelhasznaloiInterfesz.beker();
+        if (kulsoVonalkod == "")
+            szurok.kulsoVonalkod = null;
+        else
+            szurok.kulsoVonalkod = nev;
+
+        FelhasznaloiInterfesz.kiir("Behozatal datum szuro (Hagyja uresen, ha nem szeretne megadni): ");
+        string beDatum = FelhasznaloiInterfesz.beker();
+        if (beDatum == "")
+            szurok.beIdopont = new DateTime().ToString();
+        else
+            szurok.beIdopont = DateTime.Parse(beDatum).ToString();
+
+        FelhasznaloiInterfesz.kiir("Kivitel datum szuro (Hagyja uresen, ha nem szeretne megadni): ");
+        string kiDatum = FelhasznaloiInterfesz.beker();
+        if (kiDatum == "")
+            szurok.kiIdopont = new DateTime().ToString();
+        else
+            szurok.kiIdopont = DateTime.Parse(kiDatum).ToString();
+
+        FelhasznaloiInterfesz.kiir("Tipus szuro (Hagyja uresen, ha nem szeretne megadni): ");
+        string tipus = FelhasznaloiInterfesz.beker();
+        if (tipus == "")
+            szurok.tipus = null;
+        else
+            szurok.tipus = tipus;
+
+        FelhasznaloiInterfesz.kiir("Raklap azonosito szuro (Hagyja uresen, ha nem szeretne megadni): ");
+        string raklapAzonosito = FelhasznaloiInterfesz.beker();
+        if (raklapAzonosito == "")
+        {
+            szurok.raklapAdatok = new List<string>();
+            szurok.raklapAdatok.Add(null);
+        }
+        else
+        {
+            szurok.raklapAdatok = new List<string>();
+            szurok.raklapAdatok.Add(raklapAzonosito);
+        }
+
+        FelhasznaloiInterfesz.kiir("Megrendelo azonosito szuro (Hagyja uresen, ha nem szeretne megadni): ");
+        string megrendeloAzonosito = FelhasznaloiInterfesz.beker();
+        if (megrendeloAzonosito == "")
+            szurok.megrendeloAzonosito = null;
+        else
+            szurok.megrendeloAzonosito = megrendeloAzonosito;
+
+        CommObject szuroCommObject = new CommObject("termekSzurese");
+        szuroCommObject.termekAdatok = szurok;
+
+        Task<CommObject> szurotsResponse = SocketClient.SendRequest(szuroCommObject);
+        FelhasznaloiInterfesz.kiir("Sent request, waiting for response\n");
+        CommObject szurodResponse = szurotsResponse.Result;
+
+        FelhasznaloiInterfesz.kiir(szurodResponse.termekAdatokLista.Count.ToString());
+        int i = 1;
+        foreach (CommObject.termekAdatokStruct termek in szurodResponse.termekAdatokLista)
+        {
+            FelhasznaloiInterfesz.kiir("\n" + i++ + ". termek adatai: \n");
+            FelhasznaloiInterfesz.kiir("Megrendelo azonositoja: " + termek.megrendeloAzonosito + "\n");
+            FelhasznaloiInterfesz.kiir("Nev: " + termek.termekNev + "\n");
+            FelhasznaloiInterfesz.kiir("Kulso vonalkod: " + termek.kulsoVonalkod + "\n");
+            FelhasznaloiInterfesz.kiir("Tipus: " + (termek.tipus == "H" ? "hutott" : "nem hutott") + "\n");
+            FelhasznaloiInterfesz.kiir("Behozatal idopontja: " + termek.beIdopont.ToString() + "\n");
+            FelhasznaloiInterfesz.kiir("Kivitel idopontja: " + termek.kiIdopont.ToString() + "\n");
+            FelhasznaloiInterfesz.kiir("Mennyiseg: " + termek.mennyiseg.ToString() + "\n");
+
+            int j = 1;
+            foreach (string raklap in termek.raklapAdatok)
+            {
+                FelhasznaloiInterfesz.kiir(j++ + ". raklap azonositoja: " + raklap + "\n");
+            }
+            FelhasznaloiInterfesz.kiir("________________________________\n");
+        }
+    }
 }

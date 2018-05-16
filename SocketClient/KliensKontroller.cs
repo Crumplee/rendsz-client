@@ -124,6 +124,7 @@ namespace KliensKontroller
                         termekekListazasa();
                         break;
                     case "3":
+                        termekekSzurtListazasa();
                         break;
                     case "4":
                         termekModositas();
@@ -177,6 +178,7 @@ namespace KliensKontroller
                         termekekListazasa();
                         break;
                     case "2":
+                        termekekSzurtListazasa();
                         break;
                     case "3":
                         munkarendHozzaadas("bela01");
@@ -321,6 +323,11 @@ namespace KliensKontroller
         public void termekTorles()
         {
             new TermekKezeles().termekTorles();
+        }
+
+        public void termekekSzurtListazasa()
+        {
+            new TermekKezeles().termekekSzurtListazasa();
         }
     }
 }
