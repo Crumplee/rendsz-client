@@ -565,7 +565,7 @@ class TermekKezeles
         if (kulsoVonalkod == "")
             szurok.kulsoVonalkod = null;
         else
-            szurok.kulsoVonalkod = nev;
+            szurok.kulsoVonalkod = kulsoVonalkod;
 
         FelhasznaloiInterfesz.kiir("Behozatal datum szuro (Hagyja uresen, ha nem szeretne megadni): ");
         string beDatum = FelhasznaloiInterfesz.beker();
@@ -593,7 +593,7 @@ class TermekKezeles
         if (raklapAzonosito == "")
         {
             szurok.raklapAdatok = new List<string>();
-            szurok.raklapAdatok.Add(null);
+            //szurok.raklapAdatok.Add(null);
         }
         else
         {
@@ -614,8 +614,7 @@ class TermekKezeles
         Task<CommObject> szurotsResponse = SocketClient.SendRequest(szuroCommObject);
         FelhasznaloiInterfesz.kiir("Sent request, waiting for response\n");
         CommObject szurodResponse = szurotsResponse.Result;
-
-        FelhasznaloiInterfesz.kiir(szurodResponse.termekAdatokLista.Count.ToString());
+        
         int i = 1;
         foreach (CommObject.termekAdatokStruct termek in szurodResponse.termekAdatokLista)
         {
