@@ -186,6 +186,7 @@ namespace KliensKontroller
                         termekBehozatal();
                         break;
                     case "8":
+                        termekKivitel();
                         break;
                     case "9":
                         kijelentkezes();
