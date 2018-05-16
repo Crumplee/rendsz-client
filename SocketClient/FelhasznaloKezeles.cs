@@ -107,7 +107,7 @@ class FelhasznaloKezeles
             }
             else
             {
-                Console.WriteLine("Nem megfelelo sorszam. Probald ujra!");
+                FelhasznaloiInterfesz.kiir("Nem megfelelo sorszam. Probald ujra!\n");
                 helyesAdat = false;
             }
         } while (!helyesAdat);
@@ -210,7 +210,7 @@ class FelhasznaloKezeles
             }
             else
             {
-                Console.WriteLine("Nem megfelelo sorszam. Probald ujra!");
+                FelhasznaloiInterfesz.kiir("Nem megfelelo sorszam. Probald ujra!\n");
                 helyesAdat = false;
             }
         } while (!helyesAdat);

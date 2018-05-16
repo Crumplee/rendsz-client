@@ -293,4 +293,196 @@ class TermekKezeles
             }
         } while (!helyesFormatum);
     }
+
+    public void termekModositas()
+    {
+        CommObject commObject = new CommObject("termekekListazasa");
+
+        Task<CommObject> tsResponse = SocketClient.SendRequest(commObject);
+        FelhasznaloiInterfesz.kiir("Sent request, waiting for response\n");
+        CommObject dResponse = tsResponse.Result;
+
+        int i = 1;
+        foreach (CommObject.termekAdatokStruct termek in dResponse.termekAdatokLista)
+        {
+            FelhasznaloiInterfesz.kiir("\n" + i++ + ". termek adatai: \n");
+            FelhasznaloiInterfesz.kiir("Megrendelo azonositoja: " + termek.megrendeloAzonosito + "\n");
+            FelhasznaloiInterfesz.kiir("Nev: " + termek.termekNev + "\n");
+            FelhasznaloiInterfesz.kiir("Kulso vonalkod: " + termek.kulsoVonalkod + "\n");
+            FelhasznaloiInterfesz.kiir("Tipus: " + (termek.tipus == "H" ? "hutott" : "nem hutott") + "\n");
+            FelhasznaloiInterfesz.kiir("Behozatal idopontja: " + termek.beIdopont.ToString() + "\n");
+            FelhasznaloiInterfesz.kiir("Kivitel idopontja: " + termek.kiIdopont.ToString() + "\n");
+            FelhasznaloiInterfesz.kiir("Mennyiseg: " + termek.mennyiseg.ToString() + "\n");
+
+            int j = 1;
+            foreach (string raklap in termek.raklapAdatok)
+            {
+                FelhasznaloiInterfesz.kiir(j++ + ". raklap azonositoja: " + raklap + "\n");
+            }
+            FelhasznaloiInterfesz.kiir("________________________________\n");
+        }
+        bool helyesSorszam;
+
+        do
+        {
+            helyesSorszam = true;
+            FelhasznaloiInterfesz.kiir("Kerem a termek sorszamat: ");
+            string valasztas = FelhasznaloiInterfesz.beker();
+            int sorszam;
+
+            if (Int32.TryParse(valasztas, out sorszam) && sorszam >= 0 && sorszam <= dResponse.termekAdatokLista.Count)
+            {
+                if (sorszam == 0) return;
+
+                CommObject.termekAdatokStruct ujAdatok = dResponse.termekAdatokLista[sorszam - 1];
+
+                FelhasznaloiInterfesz.kiir("Uj megrendelo azonosito (Hagyja uresen, ha nem szeretne valtoztatni): ");
+                string ujMegrendeloAzonosito = FelhasznaloiInterfesz.beker();
+                if (ujMegrendeloAzonosito == "")
+                    ujMegrendeloAzonosito = ujAdatok.megrendeloAzonosito;
+                else
+                    ujAdatok.megrendeloAzonosito = ujMegrendeloAzonosito;
+
+                FelhasznaloiInterfesz.kiir("Uj termek nev (Hagyja uresen, ha nem szeretne valtoztatni): ");
+                string ujTermekNev = FelhasznaloiInterfesz.beker();
+                if (ujTermekNev == "")
+                    ujTermekNev = ujAdatok.termekNev;
+                else
+                    ujAdatok.termekNev = ujTermekNev;
+
+                FelhasznaloiInterfesz.kiir("Uj kulso vonalkod (Hagyja uresen, ha nem szeretne valtoztatni): ");
+                string ujKulsoVonalkod = FelhasznaloiInterfesz.beker();
+                if (ujKulsoVonalkod == "")
+                    ujKulsoVonalkod = ujAdatok.kulsoVonalkod;
+                else
+                    ujAdatok.kulsoVonalkod = ujKulsoVonalkod;
+
+                FelhasznaloiInterfesz.kiir("Uj behozatal idopont (Hagyja uresen, ha nem szeretne valtoztatni): ");
+                string ujBeIdopont = FelhasznaloiInterfesz.beker();
+                string beTerminalAzonosito = null;
+                int beIdotartamEgyseg = 0;
+
+                DateTime ujBeIdopontDateTime = new DateTime();
+                if (ujBeIdopont == "")
+                    ujBeIdopont = ujAdatok.beIdopont;
+                else
+                {
+                    ujAdatok.beIdopont = ujBeIdopont;
+                    //Terminalok
+                    DateTime.TryParse(ujBeIdopont, out ujBeIdopontDateTime);
+                    //Behozatali terminal
+                    if (ujBeIdopontDateTime.ToString() != new DateTime().ToString())
+                    {
+                        CommObject beCommObject = new CommObject("terminalBeosztasokLekerdezes");
+                        beCommObject.terminalBeosztasLekerdezes = new CommObject.terminalBeosztasLekerdezesStruct("datumEsHutottseg", ujBeIdopontDateTime.ToString(), "", (ujAdatok.tipus == "HH" || ujAdatok.tipus == "H"));
+
+                        Task<CommObject> tsResponse2 = SocketClient.SendRequest(beCommObject);
+                        FelhasznaloiInterfesz.kiir("Sent request, waiting for response\n");
+                        CommObject beResponse = tsResponse2.Result;
+
+                        i = 1;
+                        foreach (CommObject.terminalBeosztasAdatokStruct terminalBeosztas in beResponse.terminalBeosztasAdatokLista)
+                        {
+                            FelhasznaloiInterfesz.kiir(i++ + ". terminal beosztas adatai:\n");
+                            FelhasznaloiInterfesz.kiir(terminalBeosztas.terminalAzonosito + " " +
+                                (terminalBeosztas.hutott ? "Hutott" : "Nem hutott") + " " +
+                                terminalBeosztas.idopont + " " + terminalBeosztas.idotartamEgyseg + "\n");
+                        }
+
+                        //uj bekeres
+                        FelhasznaloiInterfesz.kiir("Kerem a terminal azonositojat: ");
+                        beTerminalAzonosito = FelhasznaloiInterfesz.beker();
+                        FelhasznaloiInterfesz.kiir("Kerem a beosztas idotartam egyseg szamat: ");
+                        Int32.TryParse(FelhasznaloiInterfesz.beker(), out beIdotartamEgyseg);
+                    }
+                }
+
+                FelhasznaloiInterfesz.kiir("Uj kiviteli idopont (Hagyja uresen, ha nem szeretne valtoztatni): ");
+                string ujKiIdopont = FelhasznaloiInterfesz.beker();
+                string kiTerminalAzonosito = null;
+                int kiIdotartamEgyseg = 0;
+
+                DateTime ujKiIdopontDateTime = new DateTime();
+                if (ujKiIdopont == "")
+                    ujKiIdopont = ujAdatok.kiIdopont;
+                else
+                {
+                    ujAdatok.kiIdopont = ujKiIdopont;
+                    DateTime.TryParse(ujKiIdopont, out ujKiIdopontDateTime);
+                    //Kihozatali terminal
+                    if (ujKiIdopontDateTime.ToString() != new DateTime().ToString())
+                    {
+                        CommObject beCommObject = new CommObject("terminalBeosztasokLekerdezes");
+                        beCommObject.terminalBeosztasLekerdezes = new CommObject.terminalBeosztasLekerdezesStruct("datumEsHutottseg", ujKiIdopontDateTime.ToString(), "", (ujAdatok.tipus == "HH" || ujAdatok.tipus == "H"));
+
+                        Task<CommObject> tsResponse2 = SocketClient.SendRequest(beCommObject);
+                        FelhasznaloiInterfesz.kiir("Sent request, waiting for response\n");
+                        CommObject beResponse = tsResponse2.Result;
+
+                        i = 1;
+                        foreach (CommObject.terminalBeosztasAdatokStruct terminalBeosztas in beResponse.terminalBeosztasAdatokLista)
+                        {
+                            FelhasznaloiInterfesz.kiir(i++ + ". terminal beosztas adatai:\n");
+                            FelhasznaloiInterfesz.kiir(terminalBeosztas.terminalAzonosito + " " +
+                                (terminalBeosztas.hutott ? "Hutott" : "Nem hutott") + " " +
+                                terminalBeosztas.idopont + " " + terminalBeosztas.idotartamEgyseg + "\n");
+                        }
+
+                        //uj bekeres
+                        FelhasznaloiInterfesz.kiir("Kerem a terminal azonositojat: ");
+                        kiTerminalAzonosito = FelhasznaloiInterfesz.beker();
+                        FelhasznaloiInterfesz.kiir("Kerem a beosztas idotartam egyseg szamat: ");
+                        Int32.TryParse(FelhasznaloiInterfesz.beker(), out kiIdotartamEgyseg);
+                    }
+                }
+
+                //megerosites
+                FelhasznaloiInterfesz.kiir("Megerosit (i/h): ");
+                string valasz = FelhasznaloiInterfesz.beker();
+                if (valasz == "i")
+                {
+                    //modositas kuldese
+
+                    CommObject modifyingCommObject = new CommObject("termekModositas");
+                    modifyingCommObject.termekAdatok = ujAdatok;
+                    modifyingCommObject.termekAzonosito = dResponse.termekAdatokLista[sorszam - 1].kulsoVonalkod;
+
+                    Task<CommObject> modifyingtsResponse = SocketClient.SendRequest(modifyingCommObject);
+                    FelhasznaloiInterfesz.kiir("Sent request, waiting for response\n");
+                    CommObject modifyingResponse = modifyingtsResponse.Result;
+                    FelhasznaloiInterfesz.kiir(modifyingResponse.Message + "\n");
+                }
+                else return;
+                //be kuldes
+                if (beTerminalAzonosito != null)
+                {
+                    CommObject terminalBeosztasCommObject = new CommObject("terminalBeosztasTermekhez");
+                    terminalBeosztasCommObject.terminalBeosztasAdatok = new CommObject.terminalBeosztasAdatokStruct(ujBeIdopontDateTime.ToString(), beIdotartamEgyseg, (ujAdatok.tipus == "HH" || ujAdatok.tipus == "H"), "be", ujKulsoVonalkod, beTerminalAzonosito);
+
+                    Task<CommObject> tsResponse3 = SocketClient.SendRequest(terminalBeosztasCommObject);
+                    FelhasznaloiInterfesz.kiir("Sent request, waiting for response\n");
+                    CommObject dResponse3 = tsResponse3.Result;
+                    FelhasznaloiInterfesz.kiir(dResponse3.Message + "\n");
+                }
+
+                //ki kuldes
+                if (kiTerminalAzonosito != null)
+                {
+                    CommObject terminalBeosztasCommObject = new CommObject("terminalBeosztasTermekhez");
+                    terminalBeosztasCommObject.terminalBeosztasAdatok = new CommObject.terminalBeosztasAdatokStruct(ujKiIdopontDateTime.ToString(), kiIdotartamEgyseg, (ujAdatok.tipus == "HH" || ujAdatok.tipus == "H"), "be", ujKulsoVonalkod, kiTerminalAzonosito);
+
+                    Task<CommObject> tsResponse3 = SocketClient.SendRequest(terminalBeosztasCommObject);
+                    FelhasznaloiInterfesz.kiir("Sent request, waiting for response\n");
+                    CommObject dResponse3 = tsResponse3.Result;
+                    FelhasznaloiInterfesz.kiir(dResponse3.Message + "\n");
+                }
+
+            }
+            else
+            {
+                FelhasznaloiInterfesz.kiir("Nem megfelelo sorszam. Probald ujra!\n");
+                helyesSorszam = false;
+            }
+        } while (!helyesSorszam);
+    }
 }
