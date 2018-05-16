@@ -302,6 +302,7 @@ class TermekKezeles
         FelhasznaloiInterfesz.kiir("Sent request, waiting for response\n");
         CommObject dResponse = tsResponse.Result;
 
+        FelhasznaloiInterfesz.kiir("\n0. kilepes\n");
         int i = 1;
         foreach (CommObject.termekAdatokStruct termek in dResponse.termekAdatokLista)
         {
@@ -363,7 +364,7 @@ class TermekKezeles
                 int beIdotartamEgyseg = 0;
 
                 DateTime ujBeIdopontDateTime = new DateTime();
-                if (ujBeIdopont == "")
+                if (ujBeIdopont == "" || DateTime.Parse(ujBeIdopont).ToString() == ujAdatok.beIdopont)
                     ujBeIdopont = ujAdatok.beIdopont;
                 else
                 {
@@ -403,7 +404,7 @@ class TermekKezeles
                 int kiIdotartamEgyseg = 0;
 
                 DateTime ujKiIdopontDateTime = new DateTime();
-                if (ujKiIdopont == "")
+                if (ujKiIdopont == "" || DateTime.Parse(ujKiIdopont).ToString() == ujAdatok.kiIdopont)
                     ujKiIdopont = ujAdatok.kiIdopont;
                 else
                 {
@@ -477,6 +478,68 @@ class TermekKezeles
                     FelhasznaloiInterfesz.kiir(dResponse3.Message + "\n");
                 }
 
+            }
+            else
+            {
+                FelhasznaloiInterfesz.kiir("Nem megfelelo sorszam. Probald ujra!\n");
+                helyesSorszam = false;
+            }
+        } while (!helyesSorszam);
+    }
+
+    public void termekTorles()
+    {
+        CommObject commObject = new CommObject("termekekListazasa");
+
+        Task<CommObject> tsResponse = SocketClient.SendRequest(commObject);
+        FelhasznaloiInterfesz.kiir("Sent request, waiting for response\n");
+        CommObject dResponse = tsResponse.Result;
+
+        FelhasznaloiInterfesz.kiir("\n0. kilepes\n");
+        int i = 1;
+        foreach (CommObject.termekAdatokStruct termek in dResponse.termekAdatokLista)
+        {
+            FelhasznaloiInterfesz.kiir("\n" + i++ + ". termek adatai: \n");
+            FelhasznaloiInterfesz.kiir("Megrendelo azonositoja: " + termek.megrendeloAzonosito + "\n");
+            FelhasznaloiInterfesz.kiir("Nev: " + termek.termekNev + "\n");
+            FelhasznaloiInterfesz.kiir("Kulso vonalkod: " + termek.kulsoVonalkod + "\n");
+            FelhasznaloiInterfesz.kiir("Tipus: " + (termek.tipus == "H" ? "hutott" : "nem hutott") + "\n");
+            FelhasznaloiInterfesz.kiir("Behozatal idopontja: " + termek.beIdopont.ToString() + "\n");
+            FelhasznaloiInterfesz.kiir("Kivitel idopontja: " + termek.kiIdopont.ToString() + "\n");
+            FelhasznaloiInterfesz.kiir("Mennyiseg: " + termek.mennyiseg.ToString() + "\n");
+
+            int j = 1;
+            foreach (string raklap in termek.raklapAdatok)
+            {
+                FelhasznaloiInterfesz.kiir(j++ + ". raklap azonositoja: " + raklap + "\n");
+            }
+            FelhasznaloiInterfesz.kiir("________________________________\n");
+        }
+        bool helyesSorszam;
+
+        do
+        {
+            helyesSorszam = true;
+            FelhasznaloiInterfesz.kiir("Kerem a termek sorszamat: ");
+            string valasztas = FelhasznaloiInterfesz.beker();
+            int sorszam;
+
+            if (Int32.TryParse(valasztas, out sorszam) && sorszam >= 0 && sorszam <= dResponse.termekAdatokLista.Count)
+            {
+                if (sorszam == 0) return;
+
+                FelhasznaloiInterfesz.kiir("Megerosit (i/h): ");
+                string valasz = FelhasznaloiInterfesz.beker();
+                if (valasz == "i")
+                {
+                    CommObject torlesCommObject = new CommObject("termekTorlese");
+                    torlesCommObject.termekAzonosito = dResponse.termekAdatokLista[sorszam - 1].kulsoVonalkod;
+
+                    Task<CommObject> torlestsResponse = SocketClient.SendRequest(torlesCommObject);
+                    FelhasznaloiInterfesz.kiir("Sent request, waiting for response\n");
+                    CommObject torlesdResponse = torlestsResponse.Result;
+                }
+                else return;
             }
             else
             {

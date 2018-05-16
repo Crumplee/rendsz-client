@@ -106,11 +106,12 @@ namespace KliensKontroller
                 FelhasznaloiInterfesz.kiir("2. Termekek listazasa\n");
                 FelhasznaloiInterfesz.kiir("3. Termekek szurt listazasa\n");
                 FelhasznaloiInterfesz.kiir("4. Termek adatok modositasa\n");
-                FelhasznaloiInterfesz.kiir("5. Terminal beosztas letrehozasa\n");
-                FelhasznaloiInterfesz.kiir("6. Terminal beosztas lekerdezese\n");
-                FelhasznaloiInterfesz.kiir("7. Beosztas lekerdezese\n");
-                FelhasznaloiInterfesz.kiir("8. Kijelentkezes\n");
-                FelhasznaloiInterfesz.kiir("9. Kilepes\n");
+                FelhasznaloiInterfesz.kiir("5. Termek torlese\n");
+                FelhasznaloiInterfesz.kiir("6. Terminal beosztas letrehozasa\n");
+                FelhasznaloiInterfesz.kiir("7. Terminal beosztas lekerdezese\n");
+                FelhasznaloiInterfesz.kiir("8. Beosztas lekerdezese\n");
+                FelhasznaloiInterfesz.kiir("9. Kijelentkezes\n");
+                FelhasznaloiInterfesz.kiir("10. Kilepes\n");
 
                 FelhasznaloiInterfesz.kiir("Valasztas sorszama: ");
                 data = FelhasznaloiInterfesz.beker();
@@ -128,18 +129,21 @@ namespace KliensKontroller
                         termekModositas();
                         break;
                     case "5":
-                        terminalBeosztasLetrehozasa();
+                        termekTorles();
                         break;
                     case "6":
-                        terminalBeosztasLekerdezese();
+                        terminalBeosztasLetrehozasa();
                         break;
                     case "7":
-                        munkarendLekerdezes();
+                        terminalBeosztasLekerdezese();
                         break;
                     case "8":
-                        kijelentkezes();
+                        munkarendLekerdezes();
                         break;
                     case "9":
+                        kijelentkezes();
+                        break;
+                    case "10":
                         kilepes();
                         break;
                     default:
@@ -312,6 +316,11 @@ namespace KliensKontroller
         public void termekModositas()
         {
             new TermekKezeles().termekModositas();
+        }
+
+        public void termekTorles()
+        {
+            new TermekKezeles().termekTorles();
         }
     }
 }
