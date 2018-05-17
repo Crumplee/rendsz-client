@@ -68,8 +68,9 @@ namespace KliensKontroller
                 FelhasznaloiInterfesz.kiir("\n1. Felhasznalo hozzaadasa\n");
                 FelhasznaloiInterfesz.kiir("2. Felhasznalo modositasa\n");
                 FelhasznaloiInterfesz.kiir("3. Felhasznalo torlese\n");
-                FelhasznaloiInterfesz.kiir("4. Kijelentkezes\n");
-                FelhasznaloiInterfesz.kiir("5. Kilepes\n");
+                FelhasznaloiInterfesz.kiir("4. Naplo bejegyzesek listazasa\n");
+                FelhasznaloiInterfesz.kiir("5. Kijelentkezes\n");
+                FelhasznaloiInterfesz.kiir("6. Kilepes\n");
 
                 FelhasznaloiInterfesz.kiir("Valasztas sorszama: ");
                 data = FelhasznaloiInterfesz.beker();
@@ -85,9 +86,12 @@ namespace KliensKontroller
                         deleteFelhasznalo();
                         break;
                     case "4":
-                        kijelentkezes();
+                        logokListazasa();
                         break;
                     case "5":
+                        kijelentkezes();
+                        break;
+                    case "6":
                         kilepes();
                         break;
                     default:
@@ -328,6 +332,11 @@ namespace KliensKontroller
         public void termekekSzurtListazasa()
         {
             new TermekKezeles().termekekSzurtListazasa();
+        }
+
+        public void logokListazasa()
+        {
+            new LogMegtekintes().logokListazasa();
         }
     }
 }
